@@ -48,9 +48,10 @@ sudo apt-get install python-imaging
 
 Set your resolution variables and your download path (make sure it's writeable):
 '''
-DOWNLOAD_PATH = '/home/randomdrake/backgrounds/'
-RESOLUTION_X = 1680
-RESOLUTION_Y = 1050
+from getpass import getuser
+DOWNLOAD_PATH = '/home/{}/backgrounds/'.format(getuser())
+RESOLUTION_X = 1920
+RESOLUTION_Y = 1080
 ''' 
 
 RUN AT STARTUP
@@ -143,6 +144,14 @@ def set_gnome_wallpaper(file_path):
     status, output = commands.getstatusoutput(command)
     return status
 
+def set_feh_wallpaper(file_path):
+    ''' Sets the new image as the wallpaper using feh'''
+    if SHOW_DEBUG:
+        print "Setting the wallpaper"
+    command = "feh --bg-center " + file_path
+    status, output = commands.getstatusoutput(command)
+    return status
+
 def print_download_status(block_count, block_size, total_size):
     written_size = human_readable_size(block_count * block_size)
     total_size = human_readable_size(total_size)
@@ -175,7 +184,8 @@ if __name__ == '__main__':
     resize_image(filename)
 
     # Set the wallpaper
-    status = set_gnome_wallpaper(filename)
+    #status = set_gnome_wallpaper(filename)
+    status = set_feh_wallpaper(filename)
     if SHOW_DEBUG:
         print "Finished!"
 
